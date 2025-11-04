@@ -99,6 +99,31 @@ export default function TodoScreen() {
     }
   };
 
+  const add100Tasks = async () => {
+    try {
+      const now = new Date().toISOString();
+      const transactions = [];
+
+      for (let i = 1; i <= 100; i++) {
+        const todoId = id();
+        transactions.push(
+          db.tx.todos[todoId].update({
+            title: `Task ${i}`,
+            completed: false,
+            userId: 'user-123',
+            createdAt: now,
+            updatedAt: now,
+          })
+        );
+      }
+
+      await db.transact(transactions);
+    } catch (error) {
+      console.error('Failed to add 100 tasks:', error);
+      Alert.alert('Error', 'Failed to add tasks. Please try again.');
+    }
+  };
+
   if (isLoading) {
     return <LoadingSpinner message="Loading todos..." />;
   }
@@ -118,7 +143,16 @@ export default function TodoScreen() {
   <StatusBar backgroundColor="#FFFFFF" style="dark" />
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Tasks</Text>
-          <Text style={styles.headerCount}>{todos.length}</Text>
+          <View style={styles.headerRight}>
+            <TouchableOpacity
+              style={styles.add100Button}
+              onPress={add100Tasks}
+              activeOpacity={0.6}
+            >
+              <Text style={styles.add100ButtonText}>add 100</Text>
+            </TouchableOpacity>
+            <Text style={styles.headerCount}>{todos.length}</Text>
+          </View>
         </View>
       </SafeAreaView>
 
@@ -196,6 +230,22 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#000000',
     letterSpacing: -0.5,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  add100Button: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    backgroundColor: '#000000',
+    borderRadius: 6,
+  },
+  add100ButtonText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   headerCount: {
     fontSize: 16,
