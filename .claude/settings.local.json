@@ -9,7 +9,10 @@
       "Bash(if exist node_modules\\.cache rd /s /q node_modules\\.cache)",
       "Bash(if exist .expo rd /s /q .expo)",
       "Bash(if exist .metro rd /s /q .metro)",
-      "Bash(netstat:*)"
+      "Bash(netstat:*)",
+      "Bash(dir /B /S *.tsx *.ts *.css *.json 2)",
+      "Bash(dir:*)",
+      "Bash(tree:*)"
     ],
     "deny": [],
     "ask": []
